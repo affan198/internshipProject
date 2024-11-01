@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Report Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .navigation {
+            background-color: #333;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .navigation .welcome {
+            font-size: 1.2em;
+            margin-left: 20px;
+        }
+        
+        .navigation .logout {
+            top: 8px;
+            right: 20px;
+            padding: 8px 16px;
+            color: white;
+            background-color: #e74c3c;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .navigation .logout:hover {
+            background-color: #c0392b;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .button {
+            color: white;
+            text-decoration: none;
+            background-color: gray;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        
+        .button:hover {
+            background-color: black;
+        }
+        
+        .content {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <span class="welcome" th:text="'Welcome, ' + ${logedInAdmin.name} + '!'"></span>
+        <a th:href="@{/admin/logout}" class="logout">Logout</a>
+    </div>
+    
+    <div class="content">
+        <div><a th:href="@{/admin/dashboard}" class="button">Back</a></div>
+        <h1>Admin Report page</h1>
+        <h2>Expense List</h2>
+        <!-- Expense Table -->
+        <table id="allExpenseTable">
+            <thead>
+                <tr>
+                    <th>Total Users</th>
+                    <th>Total Expense of Current Month</th>
+                    <th>Current month Expense Amount</th>
+                    <th>Average Expense per User</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td th:text="${totalUsers}"></td>
+                    <td th:text="${totalExpenseCurrentMonth}"></td>
+                    <td th:text="${monthExpenseAmount}"></td>
+                    <td th:text="${averageExpense}"></td>
+                </tr>
+            </tbody>
+        </table> <br>
+        <a th:href="@{/admin/currentMonthExpenses}" class="button">Current month Expenses</a>
+        <br><br>
+        <form th:action="@{/admin/monthlyExpenses}" method="get">
+        <input type="date" name="fromDate" placeholder="From Date" required="required"> :
+		<input type="date" name="toDate" placeholder="To Date" required="required">
+		<button type="submit" class="button">Get Expenses</button>
+        </form>
+        
+    </div>
+</body>
+</html>

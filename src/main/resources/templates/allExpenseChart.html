@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Expense List</title>
+<style type="text/css">
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f0f2f5;
+	margin: 0;
+	padding: 0;
+}
+
+h2 {
+	text-align: center;
+	color: #333;
+	margin-top: 20px;
+}
+
+.navigation {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 20px;
+	background-color: #4CAF50;
+	color: white;
+}
+
+.logout {
+	color: white;
+	text-decoration: none;
+	background-color: #e74c3c;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+.logout:hover {
+	background-color: #c0392b;
+}
+
+.back {
+	color: white;
+	text-decoration: none;
+	background-color: gray;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+.back:hover {
+	background-color: black;
+}
+
+.content {
+	max-width: 1000px;
+	margin: 30px auto;
+	background-color: white;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+}
+
+th, td {
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+	text-align: left;
+}
+
+th {
+	background-color: #4CAF50;
+	color: white;
+}
+
+tr:hover {
+	background-color: #f1f1f1;
+}
+
+tbody {
+	text-align: center;
+}
+</style>
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- DataTables JS -->
+<script type="text/javascript" charset="utf8"
+	src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+<!-- moment.js for date sorting -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script
+	src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+</head>
+<body>
+	<!-- Navigation -->
+	<div class="navigation">
+		<span class="welcome"
+			th:text="'Welcome, ' + ${logedInAdmin.name} + '!'"></span> <a
+			th:href="@{/admin/logout}" class="logout">Logout</a>
+	</div>
+	<!-- Dashboard Content -->
+	<div class="content">
+		<div >
+			<a th:href="@{/admin/dashboard}" class="back">Back</a>
+		</div>
+		<h2>Expense List</h2>
+		<!-- Expense Table -->
+		<table id="allExpenseTable">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Date</th>
+					<th>Type</th>
+					<th>Location</th>
+					<th>Amount</th>
+					<th>File</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="expense : ${allExpenses}">
+					<td th:text="${expense.id}"></td>
+					<td th:text="${expense.date}"></td>
+					<td th:text="${expense.type}"></td>
+					<td th:text="${expense.location}"></td>
+					<td th:text="${expense.amount}"></td>
+					<td th:text="${expense.fileName}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- DataTables Initialization -->
+	<script>
+		$(document).ready(function() {
+			$.fn.dataTable.moment('YYYY-MM-DD'); // Ensure date format matches the data
+			$('#allExpenseTable').DataTable({
+				"columnDefs" : [ {
+					"type" : "date",
+					"targets" : 1
+				} // Date column is the second column
+				]
+			});
+		});
+	</script>
+</body>
+</html>

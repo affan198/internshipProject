@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>User Dashboard</title>
+<style>
+/* General Styling */
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f0f2f5;
+	margin: 0;
+	padding: 0;
+	color: #333;
+}
+
+/* Header */
+h2 {
+	color: #4CAF50;
+	text-align: center;
+	font-size: 2em;
+	margin-top: 20px;
+}
+
+/* Navigation */
+.navigation {
+	background-color: #333;
+	padding: 15px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: white;
+}
+
+.navigation .welcome {
+	font-size: 1.2em;
+	margin-left: 20px;
+}
+
+.navigation .logout {
+	/* position: fixed; */
+	top: 8px;
+	right: 20px;
+	padding: 8px 16px;
+	color: white;
+	background-color: #e74c3c;
+	border-radius: 5px;
+	text-decoration: none;
+	transition: background-color 0.3s;
+}
+
+.navigation .logout:hover {
+	background-color: #c0392b;
+}
+
+.report1 {
+text-align: right;
+}
+
+.report {
+	color: white;
+	text-decoration: none;
+	background-color: gray;
+	padding: 10px 20px;
+	border-radius: 5px;
+	text-decoration: none;
+}
+
+.report:hover {
+	background-color: black;
+}
+
+/* Content Styling */
+.content {
+	max-width: 95%;
+	margin: 30px auto;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+p {
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0;
+}
+
+/* Table Styling */
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+	font-size: 1em;
+}
+
+th, td {
+	padding: 20px;
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	background-color: #4CAF50;
+	color: white;
+	font-weight: normal;
+}
+
+tr:hover {
+	background-color: #f1f1f1;
+}
+
+/* Actions */
+.actions a {
+	text-decoration: none;
+	color: white;
+	padding: 8px 12px;
+	border-radius: 5px;
+	margin-right: 5px;
+	transition: background-color 0.3s ease;
+	font-size: 0.9em;
+}
+
+.actions a.edit {
+	background-color: #3498db;
+}
+
+.actions a.delete {
+	background-color: #e74c3c;
+}
+
+/* Profile Links Styling */
+.profile-links {
+	text-align: center;
+	margin: 20px 0;
+}
+
+.profile-links a {
+	padding: 10px 20px;
+	margin: 5px;
+	border-radius: 5px;
+	color: white;
+	text-decoration: none;
+	transition: background-color 0.3s ease;
+	display: inline-block;
+}
+
+.profile-links .view {
+	background-color: #3498db;
+}
+
+.profile-links .edit {
+	background-color: #4CAF50;
+}
+
+.profile-links .delete {
+	background-color: #e74c3c;
+}
+
+.profile-links .expense {
+	background-color: #4CAF50;
+}
+
+/* DataTables Integration */
+.dataTables_wrapper {
+	margin-top: 20px;
+}
+</style>
+
+<!-- DataTables CSS and JS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" charset="utf8"
+	src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script
+	src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+</head>
+<body>
+	<!-- Navigation -->
+	<div class="navigation">
+		<span class="welcome"
+			th:text="'Welcome, ' + ${loggedInUser.name} + '!'"></span> <a
+			th:href="@{/user/logout}" class="logout">Logout</a>
+	</div>
+
+	<!-- Dashboard Content -->
+	<div class="content">
+		<div class="report1">
+		<a th:href="@{/user/reportingPage}" class="report">Report Page</a>
+		</div>
+		<h2>User Dashboard</h2>
+
+		<!-- User Profile Links -->
+		<div class="profile-links">
+			<a th:href="@{/user/view}" class="profile-link view">View Profile</a>
+			<a th:href="@{/user/edit}" class="profile-link edit">Edit Profile</a>
+			<a th:href="@{/user/delete}" class="profile-link delete"
+				onclick="return confirm('Are you sure you want to delete your profile?');">Delete
+				Profile</a> <a th:href="@{/expense/add}" class="profile-link expense">Add
+				Expense</a>
+		</div>
+
+		<!-- Expense Table -->
+		<table id="expenseTable">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Type</th>
+					<th>Location</th>
+					<th>Amount</th>
+					<th>File</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="expense : ${expenses}">
+					<td th:text="${expense.date}"></td>
+					<td th:text="${expense.type}"></td>
+					<td th:text="${expense.location}"></td>
+					<td th:text="${expense.amount}"></td>
+					<td th:text="${expense.fileName}"></td>
+					<td class="actions"><a
+						th:href="@{/expense/edit/{id}(id=${expense.id})}" class="edit">Edit</a>
+						<a th:href="@{/expense/delete/{id}(id=${expense.id})}"
+						class="delete"
+						onclick="return confirm('Are you sure you want to delete this expense?');">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- DataTables Initialization -->
+	<script>
+		$(document).ready(function() {
+			$.fn.dataTable.moment('YYYY-MM-DD');
+			$('#expenseTable').DataTable({
+				"columnDefs" : [ {
+					"type" : "date",
+					"targets" : 0
+				} ]
+			});
+		});
+	</script>
+</body>
+</html>

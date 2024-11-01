@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .actions button,
+        .actions a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+        .save-profile {
+            background-color: #4CAF50;
+            border: none;
+        }
+        .cancel {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Edit Profile</h2>
+    
+    <form th:action="@{/user/edit}" method="post" th:object="${user}">
+        <!-- Hidden field to retain the user ID for updating the correct user -->
+        <input type="hidden" th:field="*{id}"/>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" th:field="*{name}" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" th:field="*{email}" required>
+
+        <!-- <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" th:field="*{phone}" required> -->
+
+		<label for="password">Password:</label>
+        <input type="password" id="password" name="password" th:field="*{password}" required>
+		
+        <div class="actions">
+            <button type="submit" class="save-profile">Save Changes</button>
+            <a th:href="@{/user/view}" class="cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

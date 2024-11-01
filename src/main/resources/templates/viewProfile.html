@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .profile-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .profile-info {
+            margin: 15px 0;
+        }
+        .profile-info label {
+            font-weight: bold;
+            color: #555;
+        }
+        .profile-info p {
+            color: #777;
+            font-size: 16px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .actions a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+        }
+        .edit-profile {
+            background-color: #4CAF50;
+        }
+        .dashboard {
+            background-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-container">
+    <h2>Profile Details</h2>
+    
+    <div class="profile-info">
+        <label>Name:</label>
+        <p th:text="${user.name}">User Name</p>
+    </div>
+    
+    <div class="profile-info">
+        <label>Email:</label>
+        <p th:text="${user.email}">user@example.com</p>
+    </div>
+    
+    <!-- <div class="profile-info">
+        <label>Phone:</label>
+        <p th:text="${user.phone}">123-456-7890</p>
+    </div> -->
+
+    <div class="actions">
+        <a th:href="@{/user/edit}" class="edit-profile">Edit Profile</a>
+        <a th:href="@{/user/dashboard}" class="dashboard">Back to Dashboard</a>
+    </div>
+</div>
+
+</body>
+</html>

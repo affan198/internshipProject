@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${expense.id != null} ? 'Edit Expense' : 'Add Expense'"></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="date"],
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        button {
+            width: 30%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        a {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+           	text-decoration: none;
+           	margin-left: 37%;
+        }
+        a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2 th:text="${expense.id != null} ? 'Edit Expense' : 'Add Expense'"></h2>
+    <form th:action="${expense.id != null} ? @{/expense/edit/{id}(id=${expense.id})} : @{/expense/add}" method="post" enctype="multipart/form-data" th:object="${expense}">
+        <label>Date:</label>
+        <input type="date" th:field="*{date}" required>
+        <label>Type:</label>
+        <input type="text" th:field="*{type}" required>
+        <label>Location:</label>
+        <input type="text" th:field="*{location}" required>
+        <label>Amount:</label>
+        <input type="number" th:field="*{amount}" required>
+        <label>Upload PDF/Image:</label>
+        <input type="file" name="file" accept=".pdf, image/*" required>
+        <button type="submit">Save Expense</button>
+        <a th:href="@{/user/dashboard}" class="dashboard">Back to Dashboard</a>
+    </form>
+</body>
+</html>
